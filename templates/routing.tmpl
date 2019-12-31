@@ -1,0 +1,21 @@
+package routing
+
+import (
+	"github.com/gin-gonic/gin"
+	"{{.GoModule}}/api"
+)
+
+func ApiRun(route *gin.RouterGroup)  {
+{{range .Tabs}}
+    // {{.TableComment}} - 列表
+    route.GET("/{{.TableName}}",v1(r(api.{{.TableName}}List)))
+    // {{.TableComment}} - 详情
+    route.GET("/{{.TableName}}/:pkid",v1(r(api.{{.TableName}}Info)))
+    // {{.TableComment}} - 删除
+    route.DELETE("/{{.TableName}}/:pkid",v1(r(api.{{.TableName}}Delete)))
+    // {{.TableComment}} - 修改
+    route.PUT("/{{.TableName}}/:pkid",v1(r(api.{{.TableName}}Edit)))
+    // {{.TableComment}} - 新增
+    route.POST("/{{.TableName}}",v1(r(api.{{.TableName}}Add)))
+{{end}}
+}

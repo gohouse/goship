@@ -1,0 +1,28 @@
+############## 基本信息 #############
+[site_info]
+    root_dir = "./"   # 工作目录
+    project_name = "goship-demo"    # 项目目录名字
+    go_module = "goshipdemo"    # module名字
+    test_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxxx.xxx"    # api 测试使用的 jwt token
+
+############## 数据库配置 #############
+[database]
+    driver = "mysql" # 数据库驱动
+    dsn = "root:123456@tcp(localhost:3306)/goship?charset=utf8" # dsn链接
+    setMaxOpenConns = 300 # 连接池 - 最大打开连接数
+    setMaxIdleConns = 50  # 连接池 - 最大空闲连接数
+    prefix = "pre_"  # 表前缀
+
+############## join #############
+[join]
+    # 获取用户角色信息,默认 inner join
+    user_role = [
+        ["user as a"],
+        ["role as b", "a.role_name", "b.role_name"]
+    ]
+    # 获取用户角色信息,指定第二个参数"left", 则为 left join
+    user_role_userinfo = [
+        ["user as a"],
+        ["role as b",       "a.role_name",  "b.role_name"],
+        ["userinfo as c",   "a.id",         "c.user_id"]
+    ]

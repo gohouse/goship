@@ -1,0 +1,15 @@
+package model
+
+{{range .}}
+    // {{.TableName}} {{.TableComment}}
+    type {{.TableName}} struct {
+        {{range .TableColumnList}}
+            {{.ColumnName}} {{ColumnType}} {{.Tag}} // {{.ColumnComment}}
+        {{end}}
+    }
+    {{range .TableMethods}}
+        func ({{$.TableName}}) {{.MethodName}}() {{.ReturnType}} {
+            return {{.MethodContent}}
+        }
+    {{end}}
+{{end}}

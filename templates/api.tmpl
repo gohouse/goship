@@ -1,0 +1,153 @@
+package api
+
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/gohouse/gorose/v2"
+	"github.com/gohouse/t"
+	"{{.GoModule}}/helper"
+	"{{.GoModule}}/model"
+	"strings"
+)
+
+// {{.TableName}}List	godoc
+// @Summary 	{{.TableComment}} - 获取列表
+// @Description {{.TableComment}} - 获取列表
+// @Tags 		{{.TableName}}
+// @Accept  	json
+// @Produce		json
+// @Param		Authorization header string true "header中放入token" default({{.Token}})
+{{- range .Fields}}
+// @Param		{{.ColumnName}} query string false "{{.ColumnName}}: {{.ColumnComment}}" default()
+{{- end}}
+// @Success 	200 {object} helper.GinBack 成功时自定义返回
+// @Failure 	400 {object} helper.GinBack 失败时自定义返回
+// @Failure 	401 {object} helper.GinBack 认证失败
+// @Failure 	404 {string} string http返回，找不到资源
+// @Failure 	500 {string} string http返回，服务器错误
+// @Router    /{{.TableName}}List [get]
+func {{.TableName}}List(c *gin.Context) helper.ApiReturn {
+	// build where
+	where, _ := helper.BuildWhereMulti(c, []string{
+	    {{range .Fields}}
+		    "{{.ColumnName}}", {{end}}
+	})
+
+	// build paginate
+	limit, page := helper.BuildPageParams(c)
+
+	// query data
+	res, err := DB().Table(model.{{.TableName}}{}).Where(where).Limit(limit).Page(page).Paginate()
+
+	return helper.QueryReturn(res, err)
+}
+
+// {{.TableName}}Info	godoc
+// @Summary 	{{.TableComment}} - 获取详情
+// @Description {{.TableComment}} - 获取详情
+// @Tags 		{{.TableName}}
+// @Accept  	json
+// @Produce		json
+// @Param		Authorization header string true "header中放入token" default({{.Token}})
+// @Success 	200 {object} helper.GinBack 成功时自定义返回
+// @Failure 	400 {object} helper.GinBack 失败时自定义返回
+// @Failure 	401 {object} helper.GinBack 认证失败
+// @Failure 	404 {string} string http返回，找不到资源
+// @Failure 	500 {string} string http返回，服务器错误
+// @Router    /{{.TableName}}Info [get]
+func {{.TableName}}Info(c *gin.Context) helper.ApiReturn {
+	// query row
+	res, err := DB().Table(model.{{.TableName}}{}).Where(gorose.Data{"{{.PkidName}}": c.Param("pkid")}).First()
+
+	return helper.QueryReturn(res, err)
+}
+
+// {{.TableName}}Delete	godoc
+// @Summary 	{{.TableComment}} - 删除
+// @Description {{.TableComment}} - 删除
+// @Tags 		{{.TableName}}
+// @Accept  	json
+// @Produce		json
+// @Param		Authorization header string true "header中放入token" default({{.Token}})
+// @Success 	200 {object} helper.GinBack 成功时自定义返回
+// @Failure 	400 {object} helper.GinBack 失败时自定义返回
+// @Failure 	401 {object} helper.GinBack 认证失败
+// @Failure 	404 {string} string http返回，找不到资源
+// @Failure 	500 {string} string http返回，服务器错误
+// @Router    /{{.TableName}}Delete [delete]
+func {{.TableName}}Delete(c *gin.Context) helper.ApiReturn {
+	// parse pkid
+	var pkids = c.Param("pkid")
+	var pkid = t.New(strings.Split(pkids, ",")).SliceInterface()
+
+	// delete
+	aff, err := DB().Table(model.{{.TableName}}{}).WhereIn("{{.PkidName}}", pkid).Delete()
+
+	return helper.ExecReturn(aff, err)
+}
+
+// {{.TableName}}Edit	godoc
+// @Summary 	{{.TableComment}} - 编辑
+// @Description {{.TableComment}} - 编辑
+// @Tags 		{{.TableName}}
+// @Accept  	multipart/form-data
+// @Produce		json
+// @Param		Authorization header string true "header中放入token" default({{.Token}})
+{{- range .Fields}}
+// @Param		{{.ColumnName}} formData string false "{{.ColumnName}}: {{.ColumnComment}}" default({{.ColumnDefault}})
+{{- end}}
+// @Success 	200 {object} helper.GinBack 成功时自定义返回
+// @Failure 	400 {object} helper.GinBack 失败时自定义返回
+// @Failure 	401 {object} helper.GinBack 认证失败
+// @Failure 	404 {string} string http返回，找不到资源
+// @Failure 	500 {string} string http返回，服务器错误
+// @Router    /{{.TableName}}Edit [put]
+func {{.TableName}}Edit(c *gin.Context) helper.ApiReturn {
+	// build data
+	data, i := helper.BuildWhere(c, []string{
+		{{range .Fields}}
+			"{{.ColumnName}}", {{end}}
+	})
+	if i == 0 {
+		return helper.FailReturn("params needed")
+	}
+
+	// build where
+	where := gorose.Data{"{{.PkidName}}": c.Param("pkid")}
+
+	// insert
+	aff, err := DB().Table(model.{{.TableName}}{}).Where(where).Update(data)
+
+	return helper.ExecReturn(aff, err)
+}
+
+// {{.TableName}}Edit	godoc
+// @Summary 	{{.TableComment}} - 新增
+// @Description {{.TableComment}} - 新增
+// @Tags 		{{.TableName}}
+// @Accept  	multipart/form-data
+// @Produce		json
+// @Param		Authorization header string true "header中放入token" default({{.Token}})
+{{- range .Fields}}
+// @Param		{{.ColumnName}} formData string false "{{.ColumnName}}: {{.ColumnComment}}" default({{.ColumnDefault}})
+{{- end}}
+// @Success 	200 {object} helper.GinBack 成功时自定义返回
+// @Failure 	400 {object} helper.GinBack 失败时自定义返回
+// @Failure 	401 {object} helper.GinBack 认证失败
+// @Failure 	404 {string} string http返回，找不到资源
+// @Failure 	500 {string} string http返回，服务器错误
+// @Router    /{{.TableName}}Edit [post]
+func {{.TableName}}Add(c *gin.Context) helper.ApiReturn {
+	// build data
+	data, i := helper.BuildWhere(c, []string{
+		{{range .Fields}}
+			"{{.ColumnName}}", {{end}}
+	})
+	if i == 0 {
+		return helper.FailReturn("params needed")
+	}
+
+	// insert
+	aff, err := DB().Table(model.{{.TableName}}{}).Insert(data)
+
+	return helper.ExecReturn(aff, err)
+}
