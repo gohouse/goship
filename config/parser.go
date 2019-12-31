@@ -5,6 +5,7 @@ import (
 	"github.com/BurntSushi/toml"
 	"github.com/gohouse/gorose/v2"
 	"io/ioutil"
+	"strings"
 )
 
 type DirConf struct {
@@ -53,6 +54,7 @@ func ParseConfig(file string, c *Config) {
 	if err != nil {
 		panic(err.Error())
 	}
+	c.SiteInfo.RootDir = strings.Replace(c.SiteInfo.RootDir,"//","/",-1)
 	// 默认路径
 	c.Dir = DirConf{
 		Routing: "routing",
