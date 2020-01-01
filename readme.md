@@ -15,18 +15,6 @@ golang 官网: https://golang.org/
 export GO111MODULE=on
 ```
 
-### 安装 swagger
-`gin-swagger`官网: https://github.com/swaggo/gin-swagger  
-
-简洁安装
-```shell script
-go get -u github.com/swaggo/swag/cmd/swag
-```
-若 `$GOPATH/bin` 没有加入$PATH中，你需要执行将其可执行文件移动到$GOBIN下
-```shell script
-mv $GOPATH/bin/swag /usr/local/go/bin
-```
-
 ### 安装 goship
 `goship`官网: https://github.com/gohouse/goship    
 
@@ -37,6 +25,19 @@ go get -u github.com/gohouse/goship/cmd/goship
 若 `$GOPATH/bin` 没有加入$PATH中，你需要执行将其可执行文件移动到$GOBIN下
 ```shell script
 mv $GOPATH/bin/goship /usr/local/go/bin
+```
+
+### 安装 swagger
+linux/unix 会自动尝试安装, Windows下请手动安装,手动安装请参考  
+`gin-swagger`官网: https://github.com/swaggo/gin-swagger  
+
+linux/unix下手动简洁安装
+```shell script
+go get -u github.com/swaggo/swag/cmd/swag
+```
+若 `$GOPATH/bin` 没有加入$PATH中，你需要执行将其可执行文件移动到$GOBIN下
+```shell script
+mv $GOPATH/bin/swag /usr/local/go/bin
 ```
 
 ## 运行

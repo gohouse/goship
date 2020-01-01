@@ -35,13 +35,24 @@ func main() {
 	}
 
 	// 检查依赖
+	log.Println("检查依赖 ...")
 	if !util.CheckCommandExists("go") {
 		log.Println("未检测到go,请先安装golang")
 		return
 	}
 	if !util.CheckCommandExists("swag") {
-		log.Println("未检测到swag,请先安装gin-swagger")
-		return
+		// 尝试安装 swag
+		log.Println("未检测到swag,正在尝试自动安装 swag : go get -u github.com/swaggo/swag/cmd/swag ...")
+		err := util.RunCmd("go get -u github.com/swaggo/swag/cmd/swag > /dev/null 2>&1")
+		if err!= nil {
+			log.Println("尝试安装 swag 失败,请手动安装gin-swagger,具体可以参考文档")
+			return
+		}
+		if !util.CheckCommandExists("swag") {	// 如果依旧未安装成功,则提示用户手动安装
+			log.Println("未检测到swag,请先安装gin-swagger,具体可以参考文档")
+			return
+		}
+		log.Println("swag 安装成功 !")
 	}
 
 	// 解析配置
@@ -55,33 +66,44 @@ func main() {
 	}
 
 	// 初始化项目
+	log.Println("初始化项目 ...")
 	projectInit(&c)
 
 	// 替换 module
+	log.Println("替换 module ...")
 	replaceModulePlaceholder(&c)
 
 	// 生成路由
+	log.Println("生成路由 ...")
 	builder.NewRouting(engin, &c).Build()
 
 	// 生成api
+	log.Println("生成api ...")
 	builder.NewApi(engin, &c).Build()
 
 	// 生成 model
+	log.Println("生成 model ...")
 	genModel(engin, &c)
 
 	// 写入数据库配置到配置文件
+	log.Println("写入数据库配置到配置文件 ...")
 	addDbConf(&c)
 
 	// 生成 swagger api 文档
+	log.Println("生成 swagger api 文档 ...")
 	if err = genSwag(&c); err != nil {
 		log.Println("生成swagger api失败:", err.Error())
+		return
 	}
 
 	// 生成 go.mod
+	log.Println("生成 go.mod ...")
 	if err = genGoMod(&c); err != nil {
 		log.Println("生成go.mod失败:", err.Error())
+		return
 	}
-	log.Println("finish")
+
+	fmt.Println("\033[46;30m goship finish success !!! \033[0m")
 }
 
 func checkExport(e string) {
