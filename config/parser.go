@@ -31,6 +31,7 @@ type SiteInfo struct {
 	ProjectName string `toml:"project_name"`
 	TestToken   string `toml:"test_token"`
 	GoModule    string `toml:"go_module"`
+	GoshipTemplate    string `toml:"goship_template"`
 }
 type Config struct {
 	SiteInfo SiteInfo `toml:"site_info"`

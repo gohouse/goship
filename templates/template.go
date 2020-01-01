@@ -229,6 +229,7 @@ func getConfigTemplateFromRaw() []byte {
     project_name = "goship-demo"    # 项目目录名字
     go_module = "goshipdemo"    # module名字
     test_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxxx.xxx"    # api 测试使用的 jwt token
+    goship_template = "https://github.com/gohouse/goship-template.git" # 框架模板
 
 ############## 数据库配置 #############
 [database]

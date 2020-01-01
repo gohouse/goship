@@ -94,7 +94,7 @@ func checkExport(e string) {
 func projectInit(c *config.Config) {
 	util.RunCmd(fmt.Sprintf("rm -rf %s", c.SiteInfo.RootDir))
 	//util.RunCmd(fmt.Sprintf("cp -r ~/go/src/github.com/gohouse/goship-template %s", c.SiteInfo.RootDir))
-	util.RunCmd(fmt.Sprintf("git clone https://github.com/gohouse/goship-template.git %s", c.SiteInfo.RootDir))
+	util.RunCmd(fmt.Sprintf("git clone %s --depth=1 %s", c.SiteInfo.GoshipTemplate, c.SiteInfo.RootDir))
 }
 func replaceModulePlaceholder(c *config.Config) {
 	files, err := file.GetAllFiles(c.SiteInfo.RootDir)
