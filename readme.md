@@ -41,6 +41,7 @@ mv $GOPATH/bin/swag /usr/local/go/bin
 ```
 
 ## 运行
+### 1. 生成项目
 ```shell script
 # 如果没有配置文件,可以使用如下命令导出配置模板,config.toml为导出文件名,可任意指定
 goship -e config.toml
@@ -49,5 +50,16 @@ goship -e config.toml
 goship -f config.toml
 # 或者,如果不指定 -f,则默认读取当前目录的 config.toml
 goship
+```
+> 也可以克隆源码,手动在根目录 `/path/to/goship`执行 `go run main.go`来生成项目
+
+### 2. 运行项目
+```shell script
+# 进入生成的项目,如默认执行goship后在当前目录生成一个 goship-demo 的项目
+cd goship-demo
+# 可以编辑当前目录的配置文件,然后运行,如果不做修改,默认是8088端口
+go run mian.go
+# 或者指定配置文件
+go run main.go -f confit.toml
 ```
 

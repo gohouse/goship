@@ -109,6 +109,7 @@ func {{.TableName}}List(c *gin.Context) helper.ApiReturn {
 // @Accept  	json
 // @Produce		json
 // @Param		Authorization header string true "header中放入token" default({{.Token}})
+// @Param		pkid param string true "主键" default()
 // @Success 	200 {object} helper.GinBack 成功时自定义返回
 // @Failure 	400 {object} helper.GinBack 失败时自定义返回
 // @Failure 	401 {object} helper.GinBack 认证失败
@@ -129,6 +130,7 @@ func {{.TableName}}Info(c *gin.Context) helper.ApiReturn {
 // @Accept  	json
 // @Produce		json
 // @Param		Authorization header string true "header中放入token" default({{.Token}})
+// @Param		pkid param string true "主键" default()
 // @Success 	200 {object} helper.GinBack 成功时自定义返回
 // @Failure 	400 {object} helper.GinBack 失败时自定义返回
 // @Failure 	401 {object} helper.GinBack 认证失败
@@ -154,7 +156,7 @@ func {{.TableName}}Delete(c *gin.Context) helper.ApiReturn {
 // @Produce		json
 // @Param		Authorization header string true "header中放入token" default({{.Token}})
 {{- range .Fields}}
-// @Param		{{.ColumnName}} formData string false "{{.ColumnName}}: {{.ColumnComment}}" default({{.ColumnDefault}})
+// @Param		{{.ColumnName}} formData string false "{{.ColumnName}}: {{.ColumnComment}}" default()
 {{- end}}
 // @Success 	200 {object} helper.GinBack 成功时自定义返回
 // @Failure 	400 {object} helper.GinBack 失败时自定义返回
@@ -165,8 +167,9 @@ func {{.TableName}}Delete(c *gin.Context) helper.ApiReturn {
 func {{.TableName}}Edit(c *gin.Context) helper.ApiReturn {
 	// build data
 	data, i := helper.BuildWhere(c, []string{
-		{{range .Fields}}
-			"{{.ColumnName}}", {{end}}
+		{{- range .Fields}}
+			"{{.ColumnName}}",
+        {{- end}}
 	})
 	if i == 0 {
 		return helper.FailReturn("params needed")
@@ -189,7 +192,7 @@ func {{.TableName}}Edit(c *gin.Context) helper.ApiReturn {
 // @Produce		json
 // @Param		Authorization header string true "header中放入token" default({{.Token}})
 {{- range .Fields}}
-// @Param		{{.ColumnName}} formData string false "{{.ColumnName}}: {{.ColumnComment}}" default({{.ColumnDefault}})
+// @Param		{{.ColumnName}} formData string false "{{.ColumnName}}: {{.ColumnComment}}" default()
 {{- end}}
 // @Success 	200 {object} helper.GinBack 成功时自定义返回
 // @Failure 	400 {object} helper.GinBack 失败时自定义返回
@@ -200,8 +203,9 @@ func {{.TableName}}Edit(c *gin.Context) helper.ApiReturn {
 func {{.TableName}}Add(c *gin.Context) helper.ApiReturn {
 	// build data
 	data, i := helper.BuildWhere(c, []string{
-		{{range .Fields}}
-			"{{.ColumnName}}", {{end}}
+		{{- range .Fields}}
+			"{{.ColumnName}}",
+        {{- end}}
 	})
 	if i == 0 {
 		return helper.FailReturn("params needed")
