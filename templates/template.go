@@ -168,7 +168,7 @@ func {{.TableName}}Edit(c *gin.Context) helper.ApiReturn {
 	// build data
 	data, i := helper.BuildWhere(c, []string{
 		{{- range .Fields}}
-			"{{.ColumnName}}",
+			"{{- .ColumnName}}",
         {{- end}}
 	})
 	if i == 0 {
@@ -204,7 +204,7 @@ func {{.TableName}}Add(c *gin.Context) helper.ApiReturn {
 	// build data
 	data, i := helper.BuildWhere(c, []string{
 		{{- range .Fields}}
-			"{{.ColumnName}}",
+			"{{- .ColumnName}}",
         {{- end}}
 	})
 	if i == 0 {
