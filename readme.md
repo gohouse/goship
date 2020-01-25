@@ -60,6 +60,6 @@ cd goship-demo
 # 可以编辑当前目录的配置文件,然后运行,如果不做修改,默认是8088端口
 go run mian.go
 # 或者指定配置文件
-go run main.go -f confit.toml
+go run main.go -f config.toml
 ```
 
